@@ -1,0 +1,1 @@
+<?php echo $generator->contentTag('script', '', $attributes ); ?>
