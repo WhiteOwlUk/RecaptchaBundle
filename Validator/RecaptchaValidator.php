@@ -5,6 +5,8 @@ use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 
 class RecaptchaValidator extends ConstraintValidator{
+
+    CONST RECAPTCHA_VERIFY_SERVER = 'www.google.com';
     
     public function isValid($value, Constraint $constraint){
 	//define variable for recaptcha check answer
@@ -43,7 +45,7 @@ class RecaptchaValidator extends ConstraintValidator{
                 return false;
         }
 
-	$response = $this->_recaptcha_http_post (RECAPTCHA_VERIFY_SERVER, "/recaptcha/api/verify",
+	$response = $this->_recaptcha_http_post (self::RECAPTCHA_VERIFY_SERVER, "/recaptcha/api/verify",
                                           array (
                                                  'privatekey' => $privkey,
                                                  'remoteip' => $remoteip,
@@ -72,7 +74,7 @@ class RecaptchaValidator extends ConstraintValidator{
      */
     private function _recaptcha_http_post($host, $path, $data, $port = 80) {
 
-        $req = _recaptcha_qsencode ($data);
+        $req = $this->_recaptcha_qsencode ($data);
 
         $http_request  = "POST $path HTTP/1.0\r\n";
         $http_request .= "Host: $host\r\n";
@@ -95,5 +97,20 @@ class RecaptchaValidator extends ConstraintValidator{
         $response = explode("\r\n\r\n", $response, 2);
 
         return $response;
+    }
+
+    /**
+     * Encodes the given data into a query string format
+     * @param $data - array of string elements to be encoded
+     * @return string - encoded request
+    */
+    private function _recaptcha_qsencode ($data) {
+        $req = "";
+        foreach ( $data as $key => $value )
+                $req .= $key . '=' . urlencode( stripslashes($value) ) . '&';
+
+        // Cut the last '&'
+        $req=substr($req,0,strlen($req)-1);
+        return $req;
     }
 }
