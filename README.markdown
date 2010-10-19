@@ -35,7 +35,7 @@ If you use secure url for reCaptcha put true in secure.
     use Bundle\RecaptchaBundle\Field\Recaptcha,
         Bundle\RecaptchaBundle\Validator\Recaptcha as RecaptchaCheck;
 
-When you create form (if you create it in separated class not in the controller) you need pass container into the method that prepare the from.
+When you create form (if you create it in separated class not in the controller) you need pass container into the method that preparing form.
 Let's see how it works.
 
 In the controller we have some action. In this action we try to create the form. For now it's User form.
