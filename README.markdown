@@ -43,7 +43,7 @@ In the controller we have some action. In this action we try to create the form.
     public function someAction(){
 	$user = new User();
 	//now we need to declare container variable
-	$container = $this->countainer;
+	$container = $this->container;
 	$user->prepareFrom($container);
     }
 
