@@ -12,4 +12,12 @@ class Recaptcha extends Constraint
     {
         return 'validator.recaptcha';
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function targets()
+    {
+        return Constraint::PROPERTY_CONSTRAINT;
+    }
 }
