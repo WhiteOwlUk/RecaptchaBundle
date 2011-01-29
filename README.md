@@ -82,3 +82,16 @@ In template add following lines
             'theme' => 'clean',
         ),
     ), array(), 'RecaptchaBundle:Form:recaptcha_field.html.php') ?>
+
+Or using JavaScript
+
+    <div id="recaptcha-container"></div>
+    <script type="text/javascript">
+        window.onload = function () {
+            $.getScript("<?php echo $form['recaptcha']::RECAPTCHA_API_JS_SERVER ?>", function() {
+                Recaptcha.create("<?php echo $form['recaptcha']->getPublicKey() ?>", "recaptcha-container", {
+                    theme: "clean",
+                });
+            });
+        };
+    </script>

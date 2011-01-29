@@ -16,6 +16,7 @@ class RecaptchaField extends Field
      */
     const RECAPTCHA_API_SERVER        = 'http://www.google.com/recaptcha/api';
     const RECAPTCHA_API_SECURE_SERVER = 'https://www.google.com/recaptcha/api';
+    const RECAPTCHA_API_JS_SERVER     = 'http://www.google.com/recaptcha/api/js/recaptcha_ajax.js';
 
     /**
      * The javascript src attributes (challenge, noscript)
@@ -25,28 +26,43 @@ class RecaptchaField extends Field
     protected $scrips;
 
     /**
+     * The public key
+     *
+     * @var string
+     */
+    protected $pubkey;
+
+    /**
+     * The security token
+     *
+     * @var string
+     */
+    protected $secure;
+
+    /**
      * Sets the Javascript source URLs.
      *
      * @param ContainerInterface $container An ContainerInterface instance
      */
     public function setScriptURLs(ContainerInterface $container)
     {
-        $pubkey = $container->getParameter('recaptcha.pubkey');
-        $useSSL = $container->getParameter('recaptcha.secure');
+        $this->pubkey = $container->getParameter('recaptcha.pubkey');
+        $this->secure = $container->getParameter('recaptcha.secure');
 
-        if ($pubkey == null || $pubkey == '') {
+        if ($this->pubkey == null || $this->pubkey == '') {
             throw new \FormException('To use reCAPTCHA you must get an API key from <a href="https://www.google.com/recaptcha/admin/create">https://www.google.com/recaptcha/admin/create</a>');
         }
 
-        if ($useSSL) {
+
+        if ($this->secure) {
             $server = self::RECAPTCHA_API_SECURE_SERVER;
         } else {
             $server = self::RECAPTCHA_API_SERVER;
         }
 
         $this->scrips = array(
-            'challenge' => $server.'/challenge?k='.$pubkey,
-            'noscript'  => $server.'/noscript?k='.$pubkey,
+            'challenge' => $server.'/challenge?k='.$this->pubkey,
+            'noscript'  => $server.'/noscript?k='.$this->pubkey,
         );
     }
 
@@ -60,5 +76,15 @@ class RecaptchaField extends Field
     public function getScriptURL($key)
     {
         return isset($this->scrips[$key]) ? $this->scrips[$key] : null;
+    }
+
+    /**
+     * Gets the public key.
+     *
+     * @return string The javascript source URL
+     */
+    public function getPublicKey()
+    {
+        return $this->pubkey;
     }
 }
