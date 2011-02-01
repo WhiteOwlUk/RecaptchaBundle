@@ -57,7 +57,10 @@ In the controller we have some action. In this action we try to create the form.
     public function someAction(){
         ...
         $register = new Register();
-        $form = new RegisterForm('register', $register, $this->get('validator'));
+        $form = new RegisterForm('register', array(
+            'data_class' => $register,
+            'validator'  => $this->get('validator')
+        ));
         // init values
         $form->get('recaptcha')->setScriptURLs($this->container);
         ...
