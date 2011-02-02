@@ -64,7 +64,7 @@ In the controller we have some action. In this action we try to create the form.
 
 In the Register form class
 
-    public function configure()
+    protected function configure()
     {
         ...
         $this->add(new RecaptchaField('recaptcha'));
